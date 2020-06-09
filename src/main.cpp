@@ -3,53 +3,86 @@
 
 using namespace std;
 
-class Constructor
+class Player
 {
 public:
-    string data;
+    string name;
 
-    Constructor(string data)
+    //constructor
+    Player(const char *name)
     {
-        Constructor::data = data;
+        cout <<Player::name << " created  " << endl;
+        Player::name = name;
     }
-       void showConstructor(){
-        cout<<data<<endl;
+
+    //destructor
+    ~Player()
+    {
+        cout<<Player::name << " deleted " << endl;
     }
 };
 
-class NoConstructor
-{
-public:
-    string data;
-
-    void showNoConstructor(){
-        cout<<data<<endl;
+    void createPlayerStack(){
+        Player stackPlayer = Player("Stack ");
     }
 
-};
+    void createPlayerHeap(){
+        Player* heapPlayer =  new Player("Heap");
+        delete heapPlayer;
 
+    }
+    void createPlayerStackPointer(Player* &playerPointer){
+        Player stackPlayer = Player("Stack");
+        playerPointer = &stackPlayer;
+    }
+    void createPlayerHeapPointer(Player* &playerPointer){
+        Player *heapPlayer  = new Player("heap");
+        playerPointer = heapPlayer;
+        // delete heapPlayer;
+ 
+    }
+
+    Player createStackPlayer(){
+        Player stackPlayer =  Player("Stack");
+        return stackPlayer;    
+    }
+
+    Player* createHeapPlayer(){
+        Player* heapPlayer = new Player("Heap");
+        return heapPlayer;    
+    }
 
 int main(int argc, char const *argv[])
 {
-    //NoCostructor 
-    NoConstructor objectone;
-    objectone.data="no constructor";
-    objectone.showNoConstructor();
+    createPlayerStack();
+    createPlayerHeap();
+    //Simulated Memory leak
+    cout<<"\nMemoryleak"<<endl;
 
-    //WithConstructor
-    Constructor objecttwo = Constructor("Constructor");
-    objecttwo.showConstructor();
+    //PointerStackOne
+    Player *playerPointerone;
+    createPlayerStackPointer(playerPointerone);
 
-    //implicitWithConstructor
-    Constructor objectthree("ImplicitConstuctor");
-    objectthree.showConstructor();
+    //PointerHeadTwo
+    Player *playerPointertwoHeap;
+    createPlayerHeapPointer(playerPointertwoHeap);
+    cout<<playerPointertwoHeap->name<<endl;
+    playerPointertwoHeap->name="rubish";
+    cout<<playerPointertwoHeap->name<<endl;
+    playerPointertwoHeap->name="PLAYER";
+    delete playerPointertwoHeap;
 
-    //HeapWithConstructor 
-    Constructor* objectfour = new Constructor("Heap Memory in Constructor");
-    (*objectfour).showConstructor();
-    objectfour->showConstructor();
-    string data = objectfour->data;
-    cout<<data<<endl;
- 
+    cout<<"\n Return object"<<endl;
+    Player playerReturnStack = createStackPlayer();
+    cout<<playerReturnStack.name<<endl;
+
+
+    Player* playerReturnHeap = createHeapPlayer();
+    playerReturnHeap->name="ReturnHeap";
+    cout<<playerReturnHeap->name<<endl;
+    delete playerReturnHeap;
+
+
     return 0;
 }
+
